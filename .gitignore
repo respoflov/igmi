@@ -19,6 +19,7 @@ backend/storage/results/*
 !backend/storage/results/.gitkeep
 
 # ---- 에디터 / OS ----
+.claude/
 .vscode/
 .idea/
 Thumbs.db

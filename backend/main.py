@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -36,16 +38,29 @@ app = FastAPI(
 
 
 # CORS
+# 화면과 서버의 주소가 다르면 브라우저가 요청을 막는다.
+# 배포할 때는 환경변수로 실제 주소를 넘긴다. 쉼표로 여러 개 지정 가능:
+#   BANANA_ALLOW_ORIGINS=https://<깃허브아이디>.github.io
+# 지정하지 않으면 아래 로컬 개발 주소만 허용한다.
+DEFAULT_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+]
+
+ALLOW_ORIGINS = [
+    o.strip()
+    for o in os.getenv("BANANA_ALLOW_ORIGINS", ",".join(DEFAULT_ORIGINS)).split(",")
+    if o.strip()
+]
+
+
 app.add_middleware(
 
     CORSMiddleware,
 
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:5500",
-        "http://127.0.0.1:5500",
-    ],
+    allow_origins=ALLOW_ORIGINS,
 
     allow_credentials=True,
 

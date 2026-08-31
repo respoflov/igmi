@@ -2,7 +2,7 @@ from ultralytics import YOLO
 from pathlib import Path
 import uuid
 
-from config import MODEL_PATH, RESULT_DIR
+from config import MODEL_PATH, RESULT_DIR, DEFAULT_CONF, DEFAULT_IOU
 
 
 class YOLOService:
@@ -18,8 +18,12 @@ class YOLOService:
 
     def predict(self, image_path):
 
+        # conf 를 넘기지 않으면 Ultralytics 기본값 0.25 로 돈다.
+        # 배포 확정값은 0.15 다 (근거는 config.py 주석 참고).
         results = self.model(
-            image_path
+            image_path,
+            conf=DEFAULT_CONF,
+            iou=DEFAULT_IOU
         )
 
         result = results[0]

@@ -11,6 +11,7 @@ const $tips=$("tips"), $tipCard=$("tipCard"), $tipToggle=$("tipToggle"), $tipCau
 const $ripingCard=$("ripingCard"), $ripingBody=$("ripingBody"), $ripingToggle=$("ripingToggle");
 const $humiditySelect=$("humiditySelect"), $tempSelect=$("tempSelect"), $ripingResult=$("ripingResult");
 const $factList=$("factList");
+const $apiInput=$("apiInput"), $apiStatus=$("apiStatus");
 const steps=[$("stepUpload"),$("stepModel"),$("stepResult")];
 
 function getApiBase(){
@@ -178,6 +179,34 @@ function openHistory(id){
 function deleteHistory(id){writeHistory(readHistory().filter(v=>v.id!==id));renderHistory()}
 $("clearHistory").addEventListener("click",()=>{if(confirm("모든 분석 기록을 삭제할까요?")){localStorage.removeItem(HISTORY_KEY);renderHistory()}})
 renderHistory();
+
+// ---- 분석 서버 연결 ----------------------------------------------------
+// 화면(GitHub Pages)과 서버(HF Spaces)는 주소가 다르다. 어느 서버를 부를지
+// 사용자가 직접 넣을 수 있게 하고, 넣은 값은 이 브라우저에만 저장한다.
+function setApiBase(value){
+  const v=String(value||"").trim().replace(/\/+$/,"");
+  if(v) localStorage.setItem("bananaApi",v); else localStorage.removeItem("bananaApi");
+}
+async function checkApi(){
+  $apiStatus.dataset.state="checking"; $apiStatus.textContent="확인 중";
+  try{
+    const res=await fetch(getApiBase()+"/health",{cache:"no-store"});
+    if(!res.ok) throw new Error(String(res.status));
+    $apiStatus.dataset.state="ok"; $apiStatus.textContent="연결됨";
+    return true;
+  }catch(e){
+    $apiStatus.dataset.state="down"; $apiStatus.textContent="연결 안 됨";
+    return false;
+  }
+}
+async function refreshFromApi(){
+  if(!await checkApi())return;
+  await loadCookingTips(); loadFacts(); loadRipingOptions();
+}
+$apiInput.value=localStorage.getItem("bananaApi")||"";
+$apiInput.placeholder=DEFAULT_API;
+$apiInput.addEventListener("change",()=>{setApiBase($apiInput.value);refreshFromApi()});
+checkApi();
 
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(e=>console.warn("Service Worker 등록 실패:",e)));

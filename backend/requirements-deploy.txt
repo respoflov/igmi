@@ -1,0 +1,19 @@
+# 배포(컨테이너) 전용 패키지 목록.
+# 로컬 개발은 requirements.txt 를 쓰세요 — 이 파일과 다른 점은 두 가지입니다.
+#   1) psycopg2 없음: 배포에서는 PostgreSQL 대신 SQLite 를 쓴다
+#   2) torch 는 여기 없음: Dockerfile 이 CPU 전용 빌드를 따로 먼저 깐다
+#      (그냥 깔면 CUDA 포함 버전 수 GB 가 받아져 빌드가 터진다)
+
+fastapi
+uvicorn[standard]
+python-multipart
+
+sqlalchemy
+python-dotenv
+openpyxl
+
+pillow
+# pi-heif: 아이폰 사진(.HEIC) 대응. 없으면 Ultralytics 가 실행 중에 스스로
+# 설치하려 드는데, 컨테이너 안에서 그게 돌면 요청이 실패한다.
+pi-heif
+ultralytics
