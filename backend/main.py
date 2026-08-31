@@ -42,16 +42,13 @@ app = FastAPI(
 # 배포할 때는 환경변수로 실제 주소를 넘긴다. 쉼표로 여러 개 지정 가능:
 #   BANANA_ALLOW_ORIGINS=https://<깃허브아이디>.github.io
 # 지정하지 않으면 아래 로컬 개발 주소만 허용한다.
-DEFAULT_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500",
-]
-
+# 기본값은 "*"(전체 허용) 이다. 좁혀두면 배포할 때마다 이 변수를 안 넣어서
+# "아무 반응 없음"으로 막히는데, 원인이 화면에 안 드러나 찾기가 가장 어렵다.
+# 이 API 는 로그인도 쿠키도 없고, CORS 는 브라우저만 제약할 뿐 curl 은 어차피
+# 그냥 부를 수 있으므로 "*" 라고 해서 실제로 열리는 것도 없다.
 ALLOW_ORIGINS = [
     o.strip()
-    for o in os.getenv("BANANA_ALLOW_ORIGINS", ",".join(DEFAULT_ORIGINS)).split(",")
+    for o in os.getenv("BANANA_ALLOW_ORIGINS", "*").split(",")
     if o.strip()
 ]
 
@@ -62,7 +59,8 @@ app.add_middleware(
 
     allow_origins=ALLOW_ORIGINS,
 
-    allow_credentials=True,
+    # 쿠키·인증을 쓰지 않는다. True 로 두면 allow_origins="*" 가 무효가 된다.
+    allow_credentials=False,
 
     allow_methods=["*"],
 

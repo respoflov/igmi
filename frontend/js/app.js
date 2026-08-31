@@ -1,4 +1,6 @@
-const DEFAULT_API = "http://127.0.0.1:8000";
+// 배포된 서버 주소. 화면 아래 "분석 서버 연결" 에서 바꿀 수 있고,
+// 주소 뒤에 ?api=http://127.0.0.1:8000 을 붙이면 로컬 서버로도 돌릴 수 있다.
+const DEFAULT_API = "https://igmi.onrender.com";
 const HISTORY_KEY = "bananaInferenceHistoryV1";
 const KO = { unripe:"미숙성", ripe:"숙성", overripe:"과숙성", rotten:"상함" };
 let COOKING = {};

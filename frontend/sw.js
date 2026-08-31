@@ -10,7 +10,7 @@
  * 파일을 고쳤는데 브라우저가 옛날 화면을 계속 보여주면 이 숫자를 올릴 것.
  */
 
-const CACHE_NAME = "banana-shell-v11";
+const CACHE_NAME = "banana-shell-v12";
 
 const SHELL_FILES = [
   "./",

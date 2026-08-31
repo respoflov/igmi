@@ -44,17 +44,20 @@
 > **경로는 건드릴 필요 없습니다.** `Dockerfile` 을 저장소 최상위에 두었기 때문에
 > Render 의 기본값(`./Dockerfile`)이 그대로 맞습니다.
 
-### 1-3. 환경변수
+### 1-3. 환경변수 (선택)
 
-같은 화면 아래 **Environment Variables** 에서 **Add Environment Variable**:
+**넣지 않아도 동작합니다.** 기본값이 "모든 주소 허용" 이라서 그냥 두셔도 됩니다.
+
+호출할 수 있는 주소를 내 화면으로만 좁히고 싶다면, **Environment Variables** 에서:
 
 | Key | Value |
 | --- | --- |
 | `BANANA_ALLOW_ORIGINS` | `https://respoflov.github.io` |
 
 > **이게 무슨 설정인가** — 브라우저는 "화면 주소와 서버 주소가 다르면" 기본적으로
-> 요청을 막습니다(보안 장치). 서버 쪽에서 "이 주소는 괜찮다"고 명시해야 통과합니다.
-> **증상이 '아무 반응 없음'이라 원인을 찾기 가장 어려운 항목**이니 빼먹지 마세요.
+> 요청을 막습니다(보안 장치). 서버가 "이 주소는 괜찮다"고 응답에 적어줘야 통과합니다.
+> 값을 넣을 때는 **주소만** 적으세요. `https://respoflov.github.io/igmi` 처럼 뒤에
+> 경로를 붙이면 맞지 않아 차단됩니다.
 
 ### 1-4. 배포와 확인
 
@@ -145,7 +148,7 @@ https://banana-api.onrender.com
 | 증상 | 원인 | 해결 |
 | --- | --- | --- |
 | 배지가 계속 **연결 안 됨** | 주소 오타, 또는 서버가 잠듦 | 주소를 직접 브라우저로 열어 `/health` 확인. 잠든 거면 30초 기다렸다 다시 |
-| 분석 버튼을 눌러도 아무 반응이 없음 | CORS 설정 누락 | Render → Environment 에 `BANANA_ALLOW_ORIGINS` 가 있는지 확인 |
+| 배지가 `연결 안 됨` 인데 서버는 살아 있음 | `BANANA_ALLOW_ORIGINS` 값이 실제 화면 주소와 다름 | 그 변수를 지우거나(전체 허용) 경로 없는 주소로 고침 |
 | 브라우저 콘솔에 `CORS policy` 오류 | 같은 원인 | 위와 같음. 주소 끝에 `/` 가 붙어 있지 않은지도 확인 |
 | 빌드가 `failed to read dockerfile` 로 실패 | Dockerfile Path 가 바뀌어 있음 | 기본값 `./Dockerfile` 로 되돌리기 |
 | Pages 주소가 404 | Pages 를 안 켰거나 아직 빌드 중 | Settings → Pages 에서 초록색 안내문이 뜰 때까지 기다림 |
