@@ -9,7 +9,11 @@
 | 항목 | 버전 | 확인 방법 |
 | --- | --- | --- |
 | Python | 3.12 이상 | `python --version` |
-| PostgreSQL | 14 이상 | `psql --version` |
+| PostgreSQL | 14 이상 (**선택**) | `psql --version` |
+
+> **PostgreSQL 은 안 깔아도 됩니다.** 접속 주소를 주지 않으면 `backend/banana.db` 라는
+> SQLite 파일 하나로 알아서 돕니다. 처음 돌려보는 거라면 3·4단계를 건너뛰고
+> 바로 5단계로 가세요. 판별·조리법·상식이 전부 그대로 동작합니다.
 
 ## 1. 가상환경 만들기
 
@@ -115,6 +119,20 @@ python -m http.server 5500 --bind 127.0.0.1
 | 시딩 | <http://127.0.0.1:8000/cooking/> | 숙성도별 조리법 JSON |
 | 전체 | 앱에서 바나나 사진 업로드 | 결과 표 + 조리법 카드 |
 
+## 코드를 고치지 않고 동작을 바꾸는 스위치 (환경변수)
+
+`backend/.env` 에 적거나, 배포처의 환경변수 설정에 넣습니다. 전부 선택 항목입니다.
+
+| 이름 | 기본값 | 하는 일 |
+| --- | --- | --- |
+| `DATABASE_URL` | (없으면 SQLite) | DB 접속 주소 |
+| `MODEL_PATH` | `weights/best.pt` | 가중치 경로 (`backend/` 기준) |
+| `BANANA_CONF` | `0.15` | 이 값보다 확신이 낮은 탐지는 버림 |
+| `BANANA_IOU` | `0.7` | 겹친 박스를 합치는 기준 |
+| `BANANA_ALLOW_ORIGINS` | `*` | API 를 호출할 수 있는 화면 주소 |
+| `UPLOAD_DIR` / `RESULT_DIR` | `storage/uploads` · `storage/results` | 이미지 저장 위치 |
+| `RIPING_XLSX_PATH` | 저장소 최상위의 `banana_riping.xlsx` | 후숙 기간 표 원본 |
+
 ## 후숙 기간 표 (`banana_riping.xlsx`)
 
 `/ripening` 기능은 엑셀 파일 하나를 원본으로 씁니다. **이 파일은 저장소에 포함돼 있지 않습니다.**
@@ -154,8 +172,8 @@ RIPING_XLSX_PATH=C:\어딘가\banana_riping.xlsx
 | --- | --- | --- |
 | 서버 시작 시 `could not connect to server` | PostgreSQL 이 꺼져 있거나 `DATABASE_URL` 이 틀림 | 서비스 실행 여부와 `.env` 의 비밀번호·DB 이름 확인 |
 | 서버 시작 시 `database "banana_db" does not exist` | DB 를 안 만듦 | 3단계의 `CREATE DATABASE banana_db;` 실행 |
-| 앱에서 "실패: Failed to fetch" | 백엔드가 안 떠 있거나 주소가 다름 | 터미널 1 확인, 주소가 다르면 `?api=` 로 지정 후 `main.py` 의 `allow_origins` 에도 추가 |
-| 브라우저 콘솔에 CORS 오류 | 프런트를 5500 이 아닌 포트로 띄움 | 5500 을 쓰거나 `main.py` 의 `allow_origins` 에 그 주소 추가 |
+| 앱에서 "실패: Failed to fetch" | 백엔드가 안 떠 있거나 주소가 다름 | 터미널 1 확인. 화면 아래 "분석 서버 연결"에 주소를 넣으세요 |
+| 브라우저 콘솔에 CORS 오류 | `BANANA_ALLOW_ORIGINS` 를 좁혀뒀는데 화면 주소가 그와 다름 | 그 변수를 지우거나(전체 허용), 경로 없는 주소로 고침 |
 | 화면을 고쳤는데 옛날 화면이 계속 나옴 | 서비스 워커가 캐시한 껍데기 | `frontend/sw.js` 의 `CACHE_NAME` 버전 숫자를 올리고 새로고침 |
 | 후숙 기간 카드가 비어 있음 | `banana_riping.xlsx` 없음 | 위 "후숙 기간 표" 항목 참고 |
 | 첫 판별이 유난히 느림 | YOLO 모델을 메모리에 올리는 중 | 정상입니다. 서버당 최초 1회만 그렇습니다 |

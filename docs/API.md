@@ -1,11 +1,15 @@
 # API 레퍼런스
 
-기본 주소: `http://127.0.0.1:8000`
-서버가 떠 있으면 <http://127.0.0.1:8000/docs> 에서 같은 내용을 직접 호출해볼 수 있습니다.
+| 어디서 도는가 | 기본 주소 |
+| --- | --- |
+| 내 컴퓨터 | `http://127.0.0.1:8000` |
+| 배포된 서버 | `https://igmi.onrender.com` |
+
+주소 뒤에 `/docs` 를 붙이면 브라우저에서 직접 호출해볼 수 있는 화면이 나옵니다.
 
 - 모든 응답은 JSON 입니다.
 - 인증은 없습니다. 누구나 호출할 수 있으므로 로컬·내부망 전제로 사용하세요.
-- CORS 는 `main.py` 의 `allow_origins` 에 적힌 주소만 허용합니다 (기본: localhost·127.0.0.1 의 3000·5500).
+- CORS 는 기본적으로 **모든 주소를 허용**합니다. 좁히려면 `BANANA_ALLOW_ORIGINS` 환경변수에 주소를 넣으세요 (쉼표로 여러 개, 경로 없이 주소만).
 
 ---
 
@@ -20,6 +24,8 @@
 | 필드 | 타입 | 설명 |
 | --- | --- | --- |
 | `file` | 파일 | `.jpg` `.jpeg` `.png` `.webp` 만 허용 |
+
+추론은 **confidence 0.15 / IoU 0.7** 로 돕니다. 팀에서 실측으로 확정한 값이며 근거는 `backend/config.py` 주석에 있습니다. `BANANA_CONF` · `BANANA_IOU` 환경변수로 바꿀 수 있습니다.
 
 ```bash
 curl -X POST http://127.0.0.1:8000/predict/ -F "file=@banana.jpg"
@@ -47,7 +53,7 @@ curl -X POST http://127.0.0.1:8000/predict/ -F "file=@banana.jpg"
 | `predicted_class` | `detections` 중 confidence 가 가장 높은 것의 클래스 |
 | `confidence` | 그 탐지의 confidence (0~1) |
 | `detections` | 찾아낸 바나나 **전부**. 화면의 결과 표는 이 배열을 그립니다 |
-| `image_path` | 업로드 원본. `http://127.0.0.1:8000/` 뒤에 붙여 이미지로 열 수 있습니다 |
+| `image_path` | 업로드 원본. 서버 주소 뒤에 붙여 이미지로 열 수 있습니다 |
 | `result_image_path` | 박스가 그려진 결과 이미지. 탐지가 0건이면 `null` |
 
 **바나나를 못 찾은 경우** — 오류가 아니라 `200` 으로 아래처럼 돌아옵니다.

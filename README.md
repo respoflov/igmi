@@ -60,7 +60,7 @@ flowchart LR
 
 ## 빠른 시작
 
-내 컴퓨터에서 돌려보는 절차입니다. 전체 내용(PostgreSQL 설치, DB 생성, 문제 해결)은 **[docs/SETUP.md](docs/SETUP.md)** 에 있습니다.
+내 컴퓨터에서 돌려보는 절차입니다. **PostgreSQL 을 설치하지 않아도 됩니다** — 접속 주소를 주지 않으면 SQLite 파일 하나로 알아서 돕니다. 전체 내용은 **[docs/SETUP.md](docs/SETUP.md)** 에 있습니다.
 
 인터넷에 올리는 방법은 **[docs/DEPLOY.md](docs/DEPLOY.md)** 를 보세요 — 화면은 GitHub Pages, 서버는 Render 에 무료로 올립니다.
 
@@ -74,7 +74,8 @@ python -m venv .venv
 REM 2) 라이브러리 설치 — ultralytics 가 torch 를 함께 받아오므로 몇 분 걸립니다
 pip install -r backend\requirements.txt
 
-REM 3) 환경변수 파일 만들기 — 만든 뒤 열어서 DB 비밀번호를 채우세요
+REM 3) (선택) PostgreSQL 을 쓸 때만. 만든 뒤 열어서 DB 비밀번호를 채우세요.
+REM     건너뛰면 SQLite 로 돕니다.
 copy backend\.env.example backend\.env
 ```
 
@@ -187,7 +188,7 @@ test set 1회 개봉으로 확정한 최종 성능은 **mAP50 0.9614 / mAP50-95 
 - **`banana_riping.xlsx` 가 저장소에 없습니다.** 후숙 기간 표의 원본 엑셀 파일로, 없어도 앱은 정상 실행되지만 `/ripening` 카드만 비어 있게 됩니다. 파일을 저장소 최상위에 두면 서버 시작 시 자동으로 DB에 들어갑니다. 필요한 표 형식은 [docs/SETUP.md](docs/SETUP.md#후숙-기간-표-banana_ripingxlsx) 를 참고하세요.
 - **회원가입 API 는 아직 연결돼 있지 않습니다.** `routers/auth.py`, `models/user.py`, `schemas/user.py`, `services/password_service.py` 는 들어 있지만 `main.py` 에 라우터를 등록하지 않았습니다. 그래서 `users` 테이블도 생성되지 않습니다.
 - **인증이 없습니다.** `/predict/` 와 `/history/` 는 누구나 호출할 수 있고, `DELETE /history/{id}` 도 마찬가지입니다. 로컬 개발 전제로 만들어졌습니다.
-- **CORS 허용 주소가 로컬로 고정돼 있습니다.** 다른 곳에 배포한다면 `main.py` 의 `allow_origins` 를 함께 고쳐야 합니다.
+- **API 를 아무나 호출할 수 있습니다.** CORS 기본값이 전체 허용이고 인증도 없습니다. 호출 주소를 좁히려면 `BANANA_ALLOW_ORIGINS` 환경변수를 쓰세요. 다만 CORS 는 브라우저만 제약하므로, 진짜로 막으려면 인증을 붙여야 합니다.
 
 ## 라이선스
 
