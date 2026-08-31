@@ -39,12 +39,10 @@
 | Region | `Singapore` (한국에서 가장 가까움) |
 | Branch | `main` |
 | Language / Runtime | **Docker** |
-| Dockerfile Path | `./backend/Dockerfile` |
-| Docker Build Context Directory | `./backend` |
 | Instance Type | **Free** |
 
-> **Dockerfile Path 와 Build Context 를 꼭 바꾸세요.** 기본값은 저장소 최상위인데,
-> 우리 Dockerfile 은 `backend/` 안에 있습니다. 이걸 안 바꾸면 빌드가 실패합니다.
+> **경로는 건드릴 필요 없습니다.** `Dockerfile` 을 저장소 최상위에 두었기 때문에
+> Render 의 기본값(`./Dockerfile`)이 그대로 맞습니다.
 
 ### 1-3. 환경변수
 
@@ -94,6 +92,7 @@ Render 에서 막히면 아래도 같은 Dockerfile 을 그대로 씁니다. **�
 뚫는 방법이 있습니다. 그 PC 가 켜져 있는 동안만 동작합니다.
 
 ```bat
+REM 이미지가 없으면 저장소 최상위에서 먼저 만든다:  docker build -t banana-api .
 REM 터미널 1 — 백엔드를 컨테이너로 실행
 docker run --rm -p 8000:7860 -e BANANA_ALLOW_ORIGINS=https://respoflov.github.io banana-api
 
@@ -148,7 +147,7 @@ https://banana-api.onrender.com
 | 배지가 계속 **연결 안 됨** | 주소 오타, 또는 서버가 잠듦 | 주소를 직접 브라우저로 열어 `/health` 확인. 잠든 거면 30초 기다렸다 다시 |
 | 분석 버튼을 눌러도 아무 반응이 없음 | CORS 설정 누락 | Render → Environment 에 `BANANA_ALLOW_ORIGINS` 가 있는지 확인 |
 | 브라우저 콘솔에 `CORS policy` 오류 | 같은 원인 | 위와 같음. 주소 끝에 `/` 가 붙어 있지 않은지도 확인 |
-| 빌드가 `failed to read dockerfile` 로 실패 | Dockerfile Path / Build Context 를 안 바꿈 | `./backend/Dockerfile` 과 `./backend` 로 설정 |
+| 빌드가 `failed to read dockerfile` 로 실패 | Dockerfile Path 가 바뀌어 있음 | 기본값 `./Dockerfile` 로 되돌리기 |
 | Pages 주소가 404 | Pages 를 안 켰거나 아직 빌드 중 | Settings → Pages 에서 초록색 안내문이 뜰 때까지 기다림 |
 | 후숙 기간 카드가 비어 있음 | `banana_riping.xlsx` 없음 (알려진 제약) | [SETUP.md](SETUP.md#후숙-기간-표-banana_ripingxlsx) 참고 |
 | 판별 기록이 사라짐 | 컨테이너 재시작 시 초기화됨 | 정상입니다. 화면의 기록은 브라우저에 따로 저장돼 남아 있습니다 |

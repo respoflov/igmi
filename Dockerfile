@@ -2,8 +2,12 @@
 #
 # 배포처: Hugging Face Spaces (SDK: Docker). 7860 포트를 기대한다.
 #
-# 로컬에서 똑같이 띄워보기:
-#   docker build -t banana-api backend
+# 이 파일은 저장소 최상위에 있다. Render 같은 호스트는 저장소 전체를 빌드
+# 컨텍스트로 쓰기 때문에, 최상위에 두면 배포 화면에서 경로 설정을 따로
+# 만질 필요가 없다.
+#
+# 로컬에서 똑같이 띄워보기 (저장소 최상위에서):
+#   docker build -t banana-api .
 #   docker run --rm -p 7860:7860 banana-api
 #   -> http://127.0.0.1:7860/docs
 
@@ -38,10 +42,10 @@ RUN pip install --no-cache-dir \
         torch torchvision
 
 # 의존성을 먼저 깔면 코드만 바뀌었을 때 이 층을 재사용해 빌드가 빨라진다
-COPY requirements-deploy.txt .
+COPY backend/requirements-deploy.txt .
 RUN pip install --no-cache-dir -r requirements-deploy.txt
 
-COPY --chown=user:user . /app
+COPY --chown=user:user backend/ /app/
 RUN chown -R user:user /app
 
 USER user

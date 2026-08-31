@@ -107,13 +107,13 @@ API 문서는 <http://127.0.0.1:8000/docs> 에서 볼 수 있습니다.
 ```
 .
 ├── index.html                   # GitHub Pages 진입점 (frontend/ 로 넘겨줌)
+├── Dockerfile                   # 배포용 컨테이너 (Render 등에서 그대로 사용)
 │
 ├── backend/
 │   ├── main.py                  # 앱 생성 · CORS · 라우터 등록 · 최초 시딩
 │   ├── config.py                # .env 읽기, 경로 계산, storage 폴더 생성
 │   ├── requirements.txt         # 로컬 개발용
 │   ├── requirements-deploy.txt  # 배포용 (PostgreSQL 제외, torch 는 Dockerfile 이 담당)
-│   ├── Dockerfile               # 배포용 컨테이너 (Render 등)
 │   ├── .env.example             # .env 템플릿 (실제 .env 는 커밋하지 않음)
 │   │
 │   ├── database/
