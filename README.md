@@ -62,7 +62,7 @@ flowchart LR
 
 내 컴퓨터에서 돌려보는 절차입니다. 전체 내용(PostgreSQL 설치, DB 생성, 문제 해결)은 **[docs/SETUP.md](docs/SETUP.md)** 에 있습니다.
 
-인터넷에 올리는 방법은 **[docs/DEPLOY.md](docs/DEPLOY.md)** 를 보세요 — 화면은 GitHub Pages, 서버는 Hugging Face Spaces 에 무료로 올립니다.
+인터넷에 올리는 방법은 **[docs/DEPLOY.md](docs/DEPLOY.md)** 를 보세요 — 화면은 GitHub Pages, 서버는 Render 에 무료로 올립니다.
 
 **Windows (명령 프롬프트 기준)**
 
@@ -113,7 +113,7 @@ API 문서는 <http://127.0.0.1:8000/docs> 에서 볼 수 있습니다.
 │   ├── config.py                # .env 읽기, 경로 계산, storage 폴더 생성
 │   ├── requirements.txt         # 로컬 개발용
 │   ├── requirements-deploy.txt  # 배포용 (PostgreSQL 제외, torch 는 Dockerfile 이 담당)
-│   ├── Dockerfile               # Hugging Face Spaces (Docker SDK) 용
+│   ├── Dockerfile               # 배포용 컨테이너 (Render 등)
 │   ├── .env.example             # .env 템플릿 (실제 .env 는 커밋하지 않음)
 │   │
 │   ├── database/

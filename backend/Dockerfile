@@ -48,4 +48,6 @@ USER user
 
 EXPOSE 7860
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "7860"]
+# 포트는 호스트가 정해주는 경우가 많다(Render 등은 PORT 환경변수를 넘긴다).
+# 안 넘어오면 7860 을 쓴다 — Hugging Face Spaces 규약값이다.
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-7860}"]
