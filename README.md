@@ -184,5 +184,11 @@ test set 1회 개봉으로 확정한 최종 성능은 **mAP50 0.9614 / mAP50-95 
 
 ## 라이선스
 
-이 저장소는 추론에 [Ultralytics](https://github.com/ultralytics/ultralytics) 를 사용하며, Ultralytics 는 **AGPL-3.0** 라이선스입니다.
-공개 저장소에 올릴 때 어떤 라이선스를 붙일지는 이 점을 확인한 뒤 정하세요. (아직 `LICENSE` 파일을 두지 않았습니다.)
+[GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0)
+
+이 프로젝트는 추론에 [Ultralytics](https://github.com/ultralytics/ultralytics) 를 사용합니다.
+Ultralytics 가 AGPL-3.0 이고, 이 앱은 그 위에서 네트워크로 추론 결과를 제공하므로 같은 라이선스를 따릅니다.
+
+정리하면 — 이 코드는 누구나 자유롭게 쓰고 고칠 수 있지만, **고친 것을 배포하거나 서비스로 제공한다면
+그 소스도 AGPL-3.0 으로 공개**해야 합니다. 상업적으로 비공개 사용을 원한다면
+[Ultralytics Enterprise License](https://ultralytics.com/license) 가 별도로 필요합니다.
