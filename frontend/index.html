@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>바나나 숙성도 판별</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#f2c14e">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <div>
+        <h2>🕘 분석 기록</h2>
+        <p>과거 결과를 다시 볼 수 있습니다.</p>
+      </div>
+      <button class="icon-btn" id="clearHistory" title="전체 기록 삭제">🗑️</button>
+    </div>
+    <div id="historyList" class="history-list">
+      <p class="empty-history">아직 분석 기록이 없습니다.</p>
+    </div>
+  </aside>
+
+  <main>
+    <header class="hero">
+      <h1>🍌 바나나 숙성도 판별</h1>
+      <p class="sub">사진 한 장으로 바나나의 현재 숙성도를 분석합니다.</p>
+    </header>
+
+    <section class="card upload-card">
+      <h2>📷 사진 업로드</h2>
+      <label class="filebtn" for="file">
+        <span class="upload-icon">📸</span>
+        <span id="filelabel">사진 선택 / 카메라 촬영</span>
+        <small>JPG, PNG 등 이미지 파일</small>
+      </label>
+      <input type="file" id="file" accept="image/*" capture="environment">
+    </section>
+
+    <section class="card" id="previewCard" hidden>
+      <img class="preview" id="preview" alt="선택한 바나나 사진">
+    </section>
+
+    <button id="go" disabled>🤖 YOLO11n으로 분석하기</button>
+
+    <section class="process" id="process" hidden aria-live="polite">
+      <div class="process-step" id="stepUpload"><span>1</span> 이미지 준비</div>
+      <div class="process-step" id="stepModel"><span>2</span> YOLO11n 객체 탐지</div>
+      <div class="process-step" id="stepResult"><span>3</span> 숙성도 결과 정리</div>
+    </section>
+
+    <p class="status" id="status"></p>
+
+    <section class="card result-card" id="resultCard" hidden>
+      <h2>✨ 분석 결과</h2>
+      <p id="summary"></p>
+      <table>
+        <thead><tr><th>객체</th><th>숙성도</th><th>Confidence</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+
+    <section class="card" id="ripingCard" hidden>
+      <div class="card-head">
+        <h2>⏳ 보관 조건별 후숙 예상 기간</h2>
+        <button class="collapse-btn" id="ripingToggle" aria-expanded="true" title="접기/펼치기">▾</button>
+      </div>
+      <div id="ripingBody">
+        <div class="riping-selects">
+          <label>저장 습도
+            <select id="humiditySelect"></select>
+          </label>
+          <label>저장 온도
+            <select id="tempSelect"></select>
+          </label>
+        </div>
+        <p id="ripingResult" class="riping-result"></p>
+        <small class="riping-disclaimer">*에틸렌 분비량에 따른 숙성 예상 기간으로 절대적이지 않습니다.</small>
+      </div>
+    </section>
+
+    <section class="card" id="tipCard" hidden>
+      <div class="card-head">
+        <h2>🍳 조리 · 섭취 방법</h2>
+        <button class="collapse-btn" id="tipToggle" aria-expanded="true" title="접기/펼치기">▾</button>
+      </div>
+      <div id="tips"></div>
+      <small class="tip-caution" id="tipCaution" hidden>*덜 익은 바나나는 전분이 많아 소화가 불편할 수 있습니다.</small>
+    </section>
+
+    <section class="card fact-card">
+      <h2>💡 바나나 상식</h2>
+      <ul id="factList"></ul>
+    </section>
+  </main>
+</div>
+
+<script src="./js/app.js"></script>
+</body>
+</html>

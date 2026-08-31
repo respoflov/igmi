@@ -1,0 +1,25 @@
+{
+  "name": "바나나 숙성도 판별",
+  "short_name": "바나나",
+  "description": "사진 한 장으로 바나나가 먹기 좋은 상태인지 판별합니다.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fffdf5",
+  "theme_color": "#f2c14e",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

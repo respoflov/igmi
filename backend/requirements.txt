@@ -1,0 +1,21 @@
+# --- 웹 서버 ---
+fastapi
+uvicorn[standard]
+python-multipart
+
+# --- 데이터베이스 (PostgreSQL) ---
+sqlalchemy
+psycopg2-binary
+
+# --- 설정 / 데이터 파일 ---
+python-dotenv
+openpyxl
+
+# --- 추론 (YOLO11n) ---
+ultralytics
+opencv-python
+pillow
+
+# --- 회원가입 API (routers/auth.py, 아직 main.py 에 미등록) ---
+pydantic[email]
+pwdlib[argon2]

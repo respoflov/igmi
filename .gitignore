@@ -1,0 +1,26 @@
+# ---- 비밀 정보 ----
+.env
+*.env
+!.env.example
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- 런타임 산출물 ----
+# 업로드 원본과 추론 결과 이미지는 실행 중에 쌓이는 파일이라 추적하지 않는다.
+backend/storage/uploads/*
+backend/storage/results/*
+!backend/storage/uploads/.gitkeep
+!backend/storage/results/.gitkeep
+
+# ---- 에디터 / OS ----
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
