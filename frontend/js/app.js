@@ -187,17 +187,29 @@ function setApiBase(value){
   const v=String(value||"").trim().replace(/\/+$/,"");
   if(v) localStorage.setItem("bananaApi",v); else localStorage.removeItem("bananaApi");
 }
-async function checkApi(){
-  $apiStatus.dataset.state="checking"; $apiStatus.textContent="확인 중";
+function setApiState(state,label){$apiStatus.dataset.state=state;$apiStatus.textContent=label}
+async function pingApi(timeoutMs){
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(),timeoutMs);
   try{
-    const res=await fetch(getApiBase()+"/health",{cache:"no-store"});
-    if(!res.ok) throw new Error(String(res.status));
-    $apiStatus.dataset.state="ok"; $apiStatus.textContent="연결됨";
-    return true;
-  }catch(e){
-    $apiStatus.dataset.state="down"; $apiStatus.textContent="연결 안 됨";
-    return false;
+    const res=await fetch(getApiBase()+"/health",{cache:"no-store",signal:ctrl.signal});
+    return res.ok;
+  }catch(e){return false}
+  finally{clearTimeout(timer)}
+}
+// 무료 서버는 한동안 요청이 없으면 잠든다. 깨어나는 데 1분쯤 걸리는데, 그동안
+// 그냥 "연결 안 됨"이라고만 보여주면 고장난 줄 알게 된다. 그래서 한 번 실패하면
+// "깨우는 중"으로 바꾸고 1분간 더 두드려본다.
+async function checkApi(){
+  setApiState("checking","확인 중");
+  if(await pingApi(8000)){setApiState("ok","연결됨");return true}
+  setApiState("waking","깨우는 중");
+  for(let i=0;i<10;i++){
+    await sleep(6000);
+    if(await pingApi(8000)){setApiState("ok","연결됨");return true}
   }
+  setApiState("down","연결 안 됨");
+  return false;
 }
 async function refreshFromApi(){
   if(!await checkApi())return;
@@ -206,7 +218,9 @@ async function refreshFromApi(){
 $apiInput.value=localStorage.getItem("bananaApi")||"";
 $apiInput.placeholder=DEFAULT_API;
 $apiInput.addEventListener("change",()=>{setApiBase($apiInput.value);refreshFromApi()});
-checkApi();
+$apiStatus.addEventListener("click",()=>{if($apiStatus.dataset.state!=="waking")refreshFromApi()});
+$apiStatus.title="눌러서 다시 확인";
+refreshFromApi();
 
 if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(e=>console.warn("Service Worker 등록 실패:",e)));
